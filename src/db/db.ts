@@ -8,9 +8,7 @@ export const connectToDatabase = async () => {
 
   try {
     await client.connect();
-    console.log(
-      `Connected to ${process.env.PGDATABASE} database on http://${process.env.PGHOST}:${process.env.PGPORT}`
-    );
+    console.log(`Connected to ${process.env.PGDATABASE} database`);
   } catch (error) {
     console.error(`Connection to ${process.env.PGDATABASE} failed : ${error}`);
   }
