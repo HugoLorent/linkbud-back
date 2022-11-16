@@ -1,7 +1,7 @@
 import { Link } from './link';
 
 export type LinkList = {
-  id: number;
+  id?: number;
   name: string;
   description: string;
   links?: Link[];

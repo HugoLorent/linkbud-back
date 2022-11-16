@@ -2,10 +2,9 @@ import { Client } from 'pg';
 import * as dotenv from 'dotenv';
 
 dotenv.config();
+export const client = new Client();
 
 export const connectToDatabase = async () => {
-  const client = new Client();
-
   try {
     await client.connect();
     console.log(`Connected to ${process.env.PGDATABASE} database`);
