@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { client } from '../db/db';
+import { client } from '../database/database';
 import { User } from '../models/user';
 import * as bcrypt from 'bcrypt';
 
