@@ -1,12 +1,10 @@
 import express from 'express';
 import cors from 'cors';
-import * as dotenv from 'dotenv';
 import { connectToDatabase } from './database/database';
 import { userRouter } from './routes/user.routes';
+import config from './config/config';
 
-dotenv.config();
-
-const port = process.env.PORT || 3000;
+const port = config.SERVER_PORT;
 
 connectToDatabase()
   .then(() => {
