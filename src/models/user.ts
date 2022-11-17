@@ -2,7 +2,7 @@ import { LinkList } from './link-list';
 
 export type User = {
   id?: number;
-  login: string;
+  email: string;
   password: string;
   linkList?: LinkList[];
 };
