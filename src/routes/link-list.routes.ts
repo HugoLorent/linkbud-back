@@ -8,3 +8,4 @@ linkListRouter.post('/', auth, linkListController.createLinkList);
 linkListRouter.get('/', auth, linkListController.getAllLinkList);
 linkListRouter.get('/:linkListId', auth, linkListController.getLinkList);
 linkListRouter.delete('/:linkListId', auth, linkListController.deleteLinkList);
+linkListRouter.put('/:linkListId', auth, linkListController.updateLinkList);
