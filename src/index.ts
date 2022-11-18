@@ -3,6 +3,7 @@ import cors from 'cors';
 import { connectToDatabase } from './database/database';
 import { userRouter } from './routes/user.routes';
 import config from './config/config';
+import { linkListRouter } from './routes/link-list.routes';
 
 const port = config.SERVER_PORT;
 
@@ -13,6 +14,7 @@ connectToDatabase()
     app.use(express.json());
     app.use(express.urlencoded({ extended: true }));
     app.use('/user', userRouter);
+    app.use('/link-list', linkListRouter);
 
     app.listen(port, () => {
       console.log(`Server is running at http://localhost:${port}`);

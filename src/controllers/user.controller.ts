@@ -28,7 +28,7 @@ const register = async (req: Request, res: Response) => {
   } catch (error) {
     console.error(error);
     return res.status(500).json({
-      error: error,
+      message: error,
     });
   }
 };
@@ -47,13 +47,15 @@ const login = async (req: Request, res: Response) => {
     try {
       const isPwdValid = await bcrypt.compare(req.body.password, user.password);
       if (isPwdValid) {
-        const token = jwt.sign(
-          { email: user.email },
-          config.JWT_SECRET_KEY || ''
-        );
-        res.json({
-          token: token,
-        });
+        if (config.JWT_SECRET_KEY) {
+          const token = jwt.sign(
+            { id: user.id, email: user.email },
+            config.JWT_SECRET_KEY
+          );
+          res.json({
+            token: token,
+          });
+        }
       } else {
         return res.status(401).json({
           message: 'Invalid password',
