@@ -22,9 +22,7 @@ const register = async (req: Request, res: Response) => {
       'INSERT INTO l_user (u_email, u_password) VALUES ($1, $2) RETURNING *',
       [newUser.email, newUser.password]
     );
-    return res.status(201).json({
-      message: `User with ${result.rows[0].u_email} email was succesfully registered`,
-    });
+    return res.status(201).json(result.rows[0]);
   } catch (error) {
     console.error(error);
     return res.status(500).json({
@@ -49,7 +47,7 @@ const login = async (req: Request, res: Response) => {
       if (isPwdValid) {
         if (config.JWT_SECRET_KEY) {
           const token = jwt.sign(
-            { id: user.id, email: user.email },
+            { userId: user.id, email: user.email },
             config.JWT_SECRET_KEY
           );
           res.json({

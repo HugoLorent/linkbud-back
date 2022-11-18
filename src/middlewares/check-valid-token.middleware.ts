@@ -7,7 +7,8 @@ export const auth = (req: Request, res: Response, next: NextFunction) => {
   if (token) {
     try {
       if (config.JWT_SECRET_KEY) {
-        jwt.verify(token, config.JWT_SECRET_KEY);
+        const decodedToken = jwt.verify(token, config.JWT_SECRET_KEY);
+        res.locals.decodedToken = decodedToken;
       }
       next();
     } catch (error) {

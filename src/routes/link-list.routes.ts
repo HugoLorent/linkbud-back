@@ -4,5 +4,7 @@ import { auth } from '../middlewares/check-valid-token.middleware';
 export const linkListRouter = express.Router();
 linkListRouter.use(express.json());
 
-linkListRouter.post('/', linkListController.createLinkList);
-linkListRouter.get('/:userId', auth, linkListController.getAllLinkList);
+linkListRouter.post('/', auth, linkListController.createLinkList);
+linkListRouter.get('/', auth, linkListController.getAllLinkList);
+linkListRouter.get('/:linkListId', auth, linkListController.getLinkList);
+linkListRouter.delete('/:linkListId', auth, linkListController.deleteLinkList);

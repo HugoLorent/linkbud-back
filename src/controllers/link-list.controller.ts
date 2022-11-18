@@ -11,9 +11,7 @@ const createLinkList = async (req: Request, res: Response) => {
       [newLinkList.name, newLinkList.description, newLinkList.userId]
     );
 
-    return res.status(201).json({
-      message: `${result.rows[0].ll_name} was succesfully created`,
-    });
+    return res.status(201).json(result.rows[0]);
   } catch (error) {
     console.error(error);
     return res.status(500).json({
@@ -26,7 +24,7 @@ const getAllLinkList = async (req: Request, res: Response) => {
   try {
     const result = await client.query(
       'SELECT * FROM l_link_list WHERE u_id = $1',
-      [req.params.userId]
+      [res.locals.decodedToken.userId]
     );
     return res.status(200).json(result.rows);
   } catch (error) {
@@ -37,4 +35,34 @@ const getAllLinkList = async (req: Request, res: Response) => {
   }
 };
 
-export default { createLinkList, getAllLinkList };
+const getLinkList = async (req: Request, res: Response) => {
+  try {
+    const result = await client.query(
+      'SELECT * FROM l_link_list WHERE ll_id = $1 AND u_id = $2',
+      [req.params.linkListId, res.locals.decodedToken.userId]
+    );
+    return res.status(200).json(result.rows[0]);
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      message: error,
+    });
+  }
+};
+
+const deleteLinkList = async (req: Request, res: Response) => {
+  try {
+    const result = await client.query(
+      'DELETE FROM l_link_list WHERE ll_id = $1 RETURNING *',
+      [req.params.linkListId]
+    );
+    return res.status(200).json(result.rows[0]);
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      message: error,
+    });
+  }
+};
+
+export default { createLinkList, getAllLinkList, getLinkList, deleteLinkList };
