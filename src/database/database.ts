@@ -8,5 +8,6 @@ export const connectToDatabase = async () => {
     console.log(`Connected to ${config.PG_DATABASE} database`);
   } catch (error) {
     console.error(`Connection to ${config.PG_DATABASE} failed : ${error}`);
+    throw error;
   }
 };
