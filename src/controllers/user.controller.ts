@@ -2,8 +2,7 @@ import { Request, Response } from 'express';
 import { client } from '../database/database';
 import { User } from '../models/user';
 import * as bcrypt from 'bcrypt';
-import jwt from 'jsonwebtoken';
-import config from '../config/config';
+import { verifyPassword } from '../utils/verify-password';
 
 const register = async (req: Request, res: Response) => {
   const newUser: User = req.body;
@@ -43,22 +42,7 @@ const login = async (req: Request, res: Response) => {
       password: result.rows[0].u_password,
     };
     try {
-      const isPwdValid = await bcrypt.compare(req.body.password, user.password);
-      if (isPwdValid) {
-        if (config.JWT_SECRET_KEY) {
-          const token = jwt.sign(
-            { userId: user.id, email: user.email },
-            config.JWT_SECRET_KEY
-          );
-          res.json({
-            token: token,
-          });
-        }
-      } else {
-        return res.status(401).json({
-          message: 'Invalid password',
-        });
-      }
+      await verifyPassword(req, res, user);
     } catch (error) {
       console.error(error);
       return res.status(500).json({
