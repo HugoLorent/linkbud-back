@@ -7,13 +7,8 @@ const createLink = async (req: Request, res: Response) => {
 
   try {
     const result = await client.query(
-      'INSERT INTO l_link (l_name, l_url, ll_id, u_id) VALUES ($1, $2, $3, $4) RETURNING *',
-      [
-        newLink.name,
-        newLink.url,
-        newLink.linkListId,
-        res.locals.decodedToken.userId,
-      ]
+      'INSERT INTO l_link (l_name, l_url, ll_id) VALUES ($1, $2, $3) RETURNING *',
+      [newLink.name, newLink.url, newLink.linkListId]
     );
     return res.status(201).json(result.rows[0]);
   } catch (error) {
@@ -26,9 +21,12 @@ const createLink = async (req: Request, res: Response) => {
 
 const getAllLink = async (req: Request, res: Response) => {
   try {
-    const result = await client.query('SELECT * FROM l_link WHERE u_id = $1', [
-      res.locals.decodedToken.userId,
-    ]);
+    const result = await client.query(
+      `SELECT l_link.* FROM l_link 
+      INNER JOIN l_link_list ON l_link_list.ll_id = l_link.ll_id
+      WHERE l_link_list.u_id = $1`,
+      [res.locals.decodedToken.userId]
+    );
     return res.status(200).json(result.rows);
   } catch (error) {
     console.error(error);
@@ -40,10 +38,9 @@ const getAllLink = async (req: Request, res: Response) => {
 
 const getLink = async (req: Request, res: Response) => {
   try {
-    const result = await client.query(
-      'SELECT * FROM l_link WHERE l_id = $1 AND u_id = $2',
-      [req.params.linkId, res.locals.decodedToken.userId]
-    );
+    const result = await client.query('SELECT * FROM l_link WHERE l_id = $1', [
+      req.params.linkId,
+    ]);
     return res.status(200).json(result.rows[0]);
   } catch (error) {
     console.error(error);

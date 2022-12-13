@@ -3,5 +3,4 @@ export type Link = {
   name: string;
   url: string;
   linkListId: number;
-  userId: number;
 };
